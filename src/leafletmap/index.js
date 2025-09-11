@@ -22,6 +22,8 @@ let clickedPolygon = null;
  */
 let fillPolygonHash = {};
 
+let baseLayers;
+
 const onClickBlank = () => {
 	if (clickedPolygon) {
 		leafletMap.removeLayer(clickedPolygon);
@@ -48,6 +50,24 @@ export const initLeafletMap = async () => {
 
 	leafletMap.zoomControl.setPosition('topright');
 
+	baseLayers = {
+		blank: L.tileLayer('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', {
+			attribution: mapData.source
+		}),
+		OpenStreetMap: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			attribution: mapData.source + ' | <a href="https://www.openstreetmap.org/copyright" target="_blank">©OpenStreetMap</a> contributors'
+		})
+	};
+	baseLayers.blank.addTo(leafletMap);
+	L.control.layers(baseLayers).addTo(leafletMap);
+
+	// レイヤーを切り替えたら、すべての塗りつぶしポリゴンを再描画
+	leafletMap.on('baselayerchange', () => {
+		updateMap({
+			...Object.fromEntries(Object.keys(fillPolygonHash).map(key => [key, 0]))
+		});
+	});
+
 	// なにもないところをクリックしたら、選択中の表示を解除
 	leafletMap.on('click', () => {
 		if (isPolygonClicked) {
@@ -70,8 +90,7 @@ export const initLeafletMap = async () => {
 	fillPolygon.forEach(({ properties, polygon }) => {
 		polygon.setStyle({
 			color: '#999999',
-			weight: 1,
-			fillOpacity: 1
+			weight: 1
 		});
 		polygon.on('click', (e) => {
 			isPolygonClicked = true;
@@ -118,10 +137,12 @@ export const initLeafletMap = async () => {
  * @param {Object<string, number>} data 
  */
 export const updateMap = (data) => {
+	const isBlankLayer = leafletMap.hasLayer(baseLayers.blank);
 	const mapData = getMapData();
 	for (const [ code, value ] of Object.entries(data)) {
 		fillPolygonHash[code].setStyle({
-			fillColor: mapData.legend[value].color
+			fillColor: mapData.legend[value].color,
+			fillOpacity: isBlankLayer ? 1 : .5
 		});
 	}
 };
