@@ -4,7 +4,10 @@ import { defineConfig } from 'eslint/config';
 
 export default defineConfig({
 	files: ['**/*.js'],
-	ignores: ['dist/**'],
+	ignores: [
+		'public/bundle.js',
+		'dist/**'
+	],
 	plugins: { js },
 	extends: ['js/recommended'],
 	languageOptions: {
