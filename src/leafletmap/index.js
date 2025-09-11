@@ -1,6 +1,7 @@
 'use strict';
 
 import { getMapData } from '../mapdata';
+import { updateTooltip } from '../tooltip';
 import { loadPolygon } from './polygon';
 
 export const leafletMapElement = document.getElementById('leaflet_map');
@@ -21,6 +22,13 @@ let clickedPolygon = null;
  */
 let fillPolygonHash = {};
 
+const onClickBlank = () => {
+	if (clickedPolygon) {
+		leafletMap.removeLayer(clickedPolygon);
+		clickedPolygon = null;
+	}
+	updateTooltip(null);
+};
 
 /**
  * リソース読込・Leaflet地図を初期化
@@ -46,11 +54,11 @@ export const initLeafletMap = async () => {
 			isPolygonClicked = false;
 			return;
 		}
-		if (clickedPolygon) {
-			leafletMap.removeLayer(clickedPolygon);
-			clickedPolygon = null;
-		}
+		onClickBlank();
 	});
+
+	// ズームレベルを削除したら、選択中の表示を解除
+	leafletMap.on('zoomstart', () => onClickBlank());
 
 	const [fillPolygon, outlinePolygon] = await Promise.all([
 		loadPolygon(mapData.fillLayer, Boolean(mapData.worldCopyJump)),
@@ -65,7 +73,7 @@ export const initLeafletMap = async () => {
 			weight: 1,
 			fillOpacity: 1
 		});
-		polygon.on('click', () => {
+		polygon.on('click', (e) => {
 			isPolygonClicked = true;
 			if (clickedPolygon) {
 				leafletMap.removeLayer(clickedPolygon);
@@ -77,6 +85,12 @@ export const initLeafletMap = async () => {
 				interactive: false
 			});
 			clickedPolygon.addTo(leafletMap);
+			const rect = leafletMapElement.getBoundingClientRect();
+			updateTooltip(
+				properties,
+				(e.originalEvent.clientX ?? e.originalEvent.changedTouches[0].clientX) - rect.left,
+				(e.originalEvent.clientY ?? e.originalEvent.changedTouches[0].clientY) - rect.top,
+			);
 		});
 		polygon.addTo(leafletMap);
 		fillPolygonHash[properties.code] = polygon;
