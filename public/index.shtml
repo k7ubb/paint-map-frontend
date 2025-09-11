@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="canonical" href="https://paint-map.com/">
-<link rel="stylesheet" type="text/css" href="app.css">
+<link rel="stylesheet" type="text/css" href="app.css?<!-- BUILD_TIMESTAMP -->">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <meta name="format-detection" content="telephone=no">
@@ -40,6 +40,6 @@
 	</details>
 </main>
 
-<script type="module" src="bundle.js"></script>
+<script type="module" src="bundle.js?<!-- BUILD_TIMESTAMP -->"></script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 import { build, context } from 'esbuild';
 import { config } from 'dotenv';
+import { replaceInFile } from 'replace-in-file';
 import fs from 'fs-extra';
 import path from 'path';
 
@@ -33,6 +34,12 @@ if (isDev) {
 
 	const timestamp = new Date().toISOString().replace(/[-:]/g, '').replace('T', '-').substring(0, 15);
 
+	const indexPath = path.join(distDir, 'index.shtml');
+	await replaceInFile({
+		files: indexPath,
+		from: /<!-- BUILD_TIMESTAMP -->/g,
+		to: timestamp,
+	});
 	await build({
 		...buildOptions,
 		minify: true,
