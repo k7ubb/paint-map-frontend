@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="canonical" href="https://paint-map.com/">
+<link rel="stylesheet" type="text/css" href="app.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<meta name="format-detection" content="telephone=no">
+<title>マップを編集 - ペイントマップ</title>
+</head>
+
+<body>
+<header>
+	<a href="/"></a>
+	<div class="title">
+		<h1 id="map_title"></h1>
+	</div>
+	<!--#exec cgi="notice_menu/notice_menu.cgi"-->
+</header>
+
+<main>
+	<div id="leaflet_map" class="loading"></div>
+	<div id="tooltip">
+		<div id="tooltip_cityname"></div>
+		<div id="tooltip_buttons"></div>
+	</div>
+	<details class="sidemenu" open>
+		<summary></summary>
+		<div>
+			<div class="legend" id="legend"></div>
+			<hr>
+			<p id="close_dialog"><i class="fa-solid fa-circle-exclamation"></i> 未保存の変更があります</p>
+			<p class="links">
+				<a href="/" target="_blank"><i class="fa-solid fa-house"></i> このサイトについて</a><br>
+				<a href="/manual/" target="_blank"><i class="fa-regular fa-circle-question"></i> マニュアル</a>
+			</p>
+		</div>
+	</details>
+</main>
+
+<script type="module" src="bundle.js"></script>
+</body>
+</html>
