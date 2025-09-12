@@ -4,6 +4,8 @@ import { getMapData } from '../mapdata';
 import { updateTooltip } from '../tooltip';
 import { loadPolygon } from './polygon';
 
+const L = window.L as typeof import('leaflet');
+
 export const leafletMapElement: HTMLElement = document.getElementById('leaflet_map')!;
 
 if (!leafletMapElement) {

@@ -3,6 +3,8 @@
 import { fetchJSON } from '../utils';
 import { convertCoordinates, type CoordinateData } from './geojson';
 
+const L = window.L as typeof import('leaflet');
+
 const moveCoordinates = (coordinates: L.LatLngTuple[][][], latDiff: number, lngDiff: number): L.LatLngTuple[][][] => {
 	return coordinates.map(points => points.map(point => point.map(([lat, lng]) => [lat + latDiff, lng + lngDiff])));
 };
