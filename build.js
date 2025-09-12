@@ -45,4 +45,10 @@ if (isDev) {
 		minify: true,
 		outfile: 'dist/bundle.js'
 	});
+
+	try {
+		await fs.remove(path.resolve('dist', 'bundle.js.map'));
+	} catch {
+		// no error handling
+	}
 }
