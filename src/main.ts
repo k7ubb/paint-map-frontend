@@ -5,9 +5,9 @@ import { leafletMapElement, initLeafletMap } from './leafletmap';
 
 const main = async () => {
 	await loadMapData();
-	leafletMapElement.classList.remove('loading');
+	leafletMapElement?.classList.remove('loading');
 	const mapData = getMapData();
-	document.getElementById('map_title').innerHTML = mapData.title;
+	(document.getElementById('map_title') as HTMLElement).innerText = mapData.title;
 	await initLeafletMap();
 };
 

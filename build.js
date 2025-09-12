@@ -8,7 +8,7 @@ const isDev = process.argv.includes('--dev');
 config({ path: isDev ? '.env.development' : '.env.production' });
 
 const buildOptions = {
-	entryPoints: ['src/main.js'],
+	entryPoints: ['src/main.ts'],
 	bundle: true,
 	format: 'esm',
 	platform: 'browser',

@@ -1,11 +1,6 @@
 'use strict';
 
-/**
- * @param {string} url
- * @param {RequestInfo | undefined} init
- * @returns {Promise<any>} パースされたJSONオブジェクト
- */
-export const fetchJSON = async (url, init) =>{
+export const fetchJSON = async (url: string, init?: RequestInit) =>{
 	const response = await fetch(url, init);
 	if (!response.ok) {
 		throw new Error(`Failed to fetch JSON from ${url}: ${response.statusText}`);

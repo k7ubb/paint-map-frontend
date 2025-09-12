@@ -4,38 +4,30 @@ import { getMapData } from '../mapdata';
 import { updateTooltip } from '../tooltip';
 import { loadPolygon } from './polygon';
 
-export const leafletMapElement = document.getElementById('leaflet_map');
+export const leafletMapElement: HTMLElement = document.getElementById('leaflet_map')!;
 
-let leafletMap;
+if (!leafletMapElement) {
+	throw new Error("Element 'leaflet_map' does not exist");
+}
 
-let isPolygonClicked = false;
+let leafletMap: L.Map;
 
-/**
- * クリック中の領域の赤枠を保持しておくポリゴン
- * @type {L.Polygon | null}
- */
-let clickedPolygon = null;
+let isPolygonClicked: boolean = false;
 
-/**
- * 入力受付、赤枠表示様のpolygonのハッシュ
- * @type {Object<string, L.Polygon>}
- */
-let fillPolygonHash = {};
+let clickedPolygon: L.Polygon | null = null;
 
-let baseLayers;
+let fillPolygonHash: { [code: string]: L.Polygon } = {};
+
+let baseLayers: { [name: string]: L.TileLayer } = {};
 
 const onClickBlank = () => {
 	if (clickedPolygon) {
 		leafletMap.removeLayer(clickedPolygon);
 		clickedPolygon = null;
 	}
-	updateTooltip(null);
+	updateTooltip();
 };
 
-/**
- * リソース読込・Leaflet地図を初期化
- * @returns {Promise<void>}
- */
 export const initLeafletMap = async () => {
 	const mapData = getMapData();
 	const params = new URLSearchParams(location.search);
@@ -107,8 +99,9 @@ export const initLeafletMap = async () => {
 			const rect = leafletMapElement.getBoundingClientRect();
 			updateTooltip(
 				properties,
-				(e.originalEvent.clientX ?? e.originalEvent.changedTouches[0].clientX) - rect.left,
-				(e.originalEvent.clientY ?? e.originalEvent.changedTouches[0].clientY) - rect.top,
+				// changedTouchesを参照するコードを削除。スマホでの動作を要確認
+				e.originalEvent.clientX - rect.left,
+				e.originalEvent.clientY - rect.top,
 			);
 		});
 		polygon.addTo(leafletMap);
@@ -132,11 +125,7 @@ export const initLeafletMap = async () => {
 	});
 };
 
-/**
- * 変更があったポリゴンの色を変更
- * @param {Object<string, number>} data 
- */
-export const updateMap = (data) => {
+export const updateMap = (data: { [code: string]: number }) => {
 	const isBlankLayer = leafletMap.hasLayer(baseLayers.blank);
 	const mapData = getMapData();
 	for (const [ code, value ] of Object.entries(data)) {

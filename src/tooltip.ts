@@ -2,33 +2,28 @@
 
 import { getMapData } from './mapdata';
 import { leafletMapElement } from './leafletmap';
+import type { PolygonProperty } from './leafletmap/geojson';
 
-/**
- * @param {{
- *   code: string;
- *   name: string;
- *   fullname?: string;
- * } | undefined} properties 
- * @param {number} x 
- * @param {number} y 
- */
-export const updateTooltip = (properties, x, y) => {
+export function updateTooltip(properties: PolygonProperty, x: number, y: number): void;
+export function updateTooltip(): void;
+
+export function updateTooltip (properties?: PolygonProperty, x?: number, y?: number) {
 	const mapData = getMapData();
-	const tooltip = document.getElementById('tooltip');
-	if (!properties) {
+	const tooltip = document.getElementById('tooltip') as HTMLElement;
+  if (!properties || typeof x !== 'number' || typeof y !== 'number') {
 		tooltip.style.display = '';
 		return;
 	}
-	document.getElementById('tooltip_cityname').innerHTML = properties.name;
+	(document.getElementById('tooltip_cityname') as HTMLElement).innerHTML = properties.name;
 
 	tooltip.style.display = 'block';
 	// 幅・高さ計算のために、一瞬だけ左上に配置する
-	tooltip.style.top = 0;
-	tooltip.style.left = 0;
+	tooltip.style.top = "0";
+	tooltip.style.left = "0";
 
 	tooltip.style.top = `${Math.min(y, leafletMapElement.clientHeight - tooltip.clientHeight - 4)}px`;
 	tooltip.style.left = `${Math.min(x, leafletMapElement.clientWidth - tooltip.clientWidth - 4)}px`;
-	const tooltip_buttons = document.getElementById('tooltip_buttons');
+	const tooltip_buttons = document.getElementById('tooltip_buttons') as HTMLElement;
 	while (tooltip_buttons.firstChild) {
 		tooltip_buttons.firstChild.remove();
 	}
