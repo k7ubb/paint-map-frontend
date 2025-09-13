@@ -2,7 +2,7 @@
 
 import { getMapData, updateMapData } from './mapdata';
 import { leafletMapElement, updateMap } from './leafletmap';
-import type { PolygonProperty } from './leafletmap/geojson';
+import type { PolygonProperty } from './leafletmap/polygon';
 
 export function updateTooltip(clear: any, properties: PolygonProperty, x: number, y: number): void;
 export function updateTooltip(): void;

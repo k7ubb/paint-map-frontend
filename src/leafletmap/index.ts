@@ -1,8 +1,9 @@
 'use strict';
 
 import { getMapData } from '../mapdata';
+import { getFillGeoJSON, getOutlineGeoJSON } from '../geojson';
 import { updateTooltip } from '../tooltip';
-import { loadPolygon } from './polygon';
+import { createPolygon } from './polygon';
 
 const L = window.L as typeof import('leaflet');
 
@@ -81,12 +82,10 @@ export const initLeafletMap = async () => {
 	// ズームレベルを削除したら、選択中の表示を解除
 	leafletMap.on('zoomstart', () => onClickBlank());
 
-	const [fillPolygon, outlinePolygon] = await Promise.all([
-		loadPolygon(mapData.fillLayer, Boolean(mapData.worldCopyJump)),
-		mapData.outlineLayer
-			? loadPolygon(mapData.outlineLayer, Boolean(mapData.worldCopyJump))
-			: Promise.resolve([])
-	]);
+	const fillGeoJSON = getFillGeoJSON();
+	const outlineGeoJSON = getOutlineGeoJSON();
+	const fillPolygon = createPolygon(fillGeoJSON, Boolean(mapData.worldCopyJump));
+	const outlinePolygon = outlineGeoJSON ? createPolygon(outlineGeoJSON, Boolean(mapData.worldCopyJump)) : [];
 
 	fillPolygon.forEach(({ properties, polygon }) => {
 		polygon.setStyle({
