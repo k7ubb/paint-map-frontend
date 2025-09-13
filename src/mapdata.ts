@@ -1,8 +1,9 @@
 'use strict';
 
 import { fetchJSON } from './utils';
+import { updateLegend } from './legend';
 
-let mapData: {
+type MapData = {
 	type: string,
 	title: string,
 	description: string,
@@ -28,10 +29,12 @@ let mapData: {
 	maxZoom?: number,
 	minZoom?: number,
 	worldCopyJump?: 0 | 1,
-} | undefined;
+};
+
+let mapData: MapData | undefined;
 
 export const getMapData = () => {
-	if (!mapData) { throw new Error("mapData is not initialized"); }
+	if (!mapData) { throw new Error("mapData is not loaded"); }
 	return mapData;
 };
 
@@ -50,4 +53,5 @@ export const updateMapData = (data: { [code: string]: number }) => {
 	for (const [ code, value ] of Object.entries(data)) {
 		mapData.data[code] = value;
 	}
+	updateLegend();
 };

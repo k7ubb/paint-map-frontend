@@ -3,6 +3,7 @@
 import { getMapData, loadMapData } from './mapdata';
 import { loadGeoJSON } from './geojson';
 import { leafletMapElement, initLeafletMap } from './leafletmap';
+import { updateLegend } from './legend';
 
 const main = async () => {
 	await loadMapData();
@@ -11,6 +12,7 @@ const main = async () => {
 	const mapData = getMapData();
 	(document.getElementById('map_title') as HTMLElement).innerText = mapData.title;
 	await initLeafletMap();
+	updateLegend();
 };
 
 await main();
