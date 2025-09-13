@@ -60,6 +60,12 @@ export const initLeafletMap = async () => {
 		updateMap({
 			...Object.fromEntries(Object.keys(fillPolygonHash).map(key => [key, 0]))
 		});
+		onClickBlank();
+	});
+
+	// 地図をドラッグしたら、選択中の表示を解除
+	leafletMap.on('dragstart', () => {
+		onClickBlank();
 	});
 
 	// なにもないところをクリックしたら、選択中の表示を解除
