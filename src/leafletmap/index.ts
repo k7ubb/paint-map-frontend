@@ -58,7 +58,8 @@ export const initLeafletMap = async () => {
 	// レイヤーを切り替えたら、すべての塗りつぶしポリゴンを再描画
 	leafletMap.on('baselayerchange', () => {
 		updateMap({
-			...Object.fromEntries(Object.keys(fillPolygonHash).map(key => [key, 0]))
+			...Object.fromEntries(Object.keys(fillPolygonHash).map(key => [key, 0])),
+			...mapData.data
 		});
 		onClickBlank();
 	});
@@ -106,6 +107,7 @@ export const initLeafletMap = async () => {
 			clickedPolygon.addTo(leafletMap);
 			const rect = leafletMapElement.getBoundingClientRect();
 			updateTooltip(
+				onClickBlank,
 				properties,
 				// changedTouchesを参照するコードを削除。スマホでの動作を要確認
 				e.originalEvent.clientX - rect.left,

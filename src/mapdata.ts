@@ -44,3 +44,10 @@ export const loadMapData = async () => {
 		mapData = await fetchJSON(`${process.env.API_URL}?function=map_generate&type=${type}`);
 	}
 };
+
+export const updateMapData = (data: { [code: string]: number }) => {
+	if (!mapData) { return; }
+	for (const [ code, value ] of Object.entries(data)) {
+		mapData.data[code] = value;
+	}
+};

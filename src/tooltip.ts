@@ -1,16 +1,16 @@
 'use strict';
 
-import { getMapData } from './mapdata';
-import { leafletMapElement } from './leafletmap';
+import { getMapData, updateMapData } from './mapdata';
+import { leafletMapElement, updateMap } from './leafletmap';
 import type { PolygonProperty } from './leafletmap/geojson';
 
-export function updateTooltip(properties: PolygonProperty, x: number, y: number): void;
+export function updateTooltip(clear: any, properties: PolygonProperty, x: number, y: number): void;
 export function updateTooltip(): void;
 
-export function updateTooltip (properties?: PolygonProperty, x?: number, y?: number) {
+export function updateTooltip (clear?: any, properties?: PolygonProperty, x?: number, y?: number) {
 	const mapData = getMapData();
 	const tooltip = document.getElementById('tooltip') as HTMLElement;
-  if (!properties || typeof x !== 'number' || typeof y !== 'number') {
+  if (!clear || !properties || typeof x !== 'number' || typeof y !== 'number') {
 		tooltip.style.display = '';
 		return;
 	}
@@ -32,5 +32,10 @@ export function updateTooltip (properties?: PolygonProperty, x?: number, y?: num
 		a.style.borderColor = (i === (mapData.data[properties.code] ?? 0)) ? '#fcc' : '';
 		a.style.background = mapData.legend[i].color;
 		tooltip_buttons.append(a);
+		a.addEventListener('click', () => {
+			updateMapData({[properties.code]: i});
+			updateMap({[properties.code]: i});
+			clear();
+		});
 	}
 };
