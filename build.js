@@ -17,6 +17,22 @@ const buildOptions = {
 	}
 };
 
+// DEPLOY_PATHが指定されている場合、.から始まるファイル以外を削除
+const cleanDir = async (dir) => {
+  const entries = await fs.readdir(dir, { withFileTypes: true });
+
+  for (const entry of entries) {
+    if (entry.name.startsWith('.')) continue;
+
+    const entryPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      await fs.rm(entryPath, { recursive: true, force: true });
+    } else {
+      await fs.unlink(entryPath);
+    }
+  }
+};
+
 if (isDev) {
 	const ctx = await context({
 		...buildOptions,
@@ -25,11 +41,15 @@ if (isDev) {
 	});
 	await ctx.watch();
 } else {
-	const distDir = path.resolve('dist');
+	const distDir = path.resolve(process.env.DEPLOY_PATH ?? 'dist');
 	const publicDir = path.resolve('public');
 
 	await fs.ensureDir(distDir);
-	await fs.emptyDir(distDir);
+	if (process.env.DEPLOY_PATH) {
+		await cleanDir(distDir);
+	} else {
+		await fs.emptyDir(distDir);
+	}
 	await fs.copy(publicDir, distDir);
 
 	const timestamp = new Date().toISOString().replace(/[-:]/g, '').replace('T', '-').substring(0, 15);
@@ -47,7 +67,7 @@ if (isDev) {
 	});
 
 	try {
-		await fs.remove(path.resolve('dist', 'bundle.js.map'));
+		await fs.remove(path.join(distDir, 'bundle.js.map'));
 	} catch {
 		// no error handling
 	}
