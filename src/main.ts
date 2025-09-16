@@ -3,6 +3,7 @@
 import { getMapData, loadMapData } from './mapdata';
 import { loadGeoJSON } from './geojson';
 import { leafletMapElement, initLeafletMap } from './leafletmap';
+import { renderTooltipWithButton } from './tooltip';
 import { updateLegend } from './legend';
 
 const main = async () => {
@@ -11,7 +12,9 @@ const main = async () => {
 	leafletMapElement?.classList.remove('loading');
 	const mapData = getMapData();
 	(document.getElementById('map_title') as HTMLElement).innerText = mapData.title;
-	await initLeafletMap();
+	await initLeafletMap({
+		tooltipRenderer: renderTooltipWithButton
+	});
 	updateLegend();
 };
 

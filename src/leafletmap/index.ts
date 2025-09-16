@@ -2,8 +2,8 @@
 
 import { getMapData } from '../mapdata';
 import { getFillGeoJSON, getOutlineGeoJSON } from '../geojson';
-import { updateTooltip } from '../tooltip';
 import { createPolygon } from './polygon';
+import type { TooltipRenderer } from '../tooltip';
 
 const L = window.L as typeof import('leaflet');
 
@@ -23,15 +23,9 @@ let fillPolygonHash: { [code: string]: L.Polygon } = {};
 
 let baseLayers: { [name: string]: L.TileLayer } = {};
 
-const onClickBlank = () => {
-	if (clickedPolygon) {
-		leafletMap.removeLayer(clickedPolygon);
-		clickedPolygon = null;
-	}
-	updateTooltip();
-};
-
-export const initLeafletMap = async () => {
+export const initLeafletMap = async (options: {
+	tooltipRenderer?: TooltipRenderer
+} = {}) => {
 	const mapData = getMapData();
 	const params = new URLSearchParams(location.search);
 	const lat = Number(params.get('lat') ?? mapData.position.lat);
@@ -44,6 +38,14 @@ export const initLeafletMap = async () => {
 	}).setView([lat, lng], zoom);
 
 	leafletMap.zoomControl.setPosition('topright');
+
+	const cleanupTooltip = () => {
+		if (clickedPolygon) {
+			leafletMap.removeLayer(clickedPolygon);
+			clickedPolygon = null;
+		}
+		options.tooltipRenderer?.();
+	};
 
 	baseLayers = {
 		blank: L.tileLayer('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', {
@@ -62,12 +64,12 @@ export const initLeafletMap = async () => {
 			...Object.fromEntries(Object.keys(fillPolygonHash).map(key => [key, 0])),
 			...mapData.data
 		});
-		onClickBlank();
+		cleanupTooltip();
 	});
 
 	// 地図をドラッグしたら、選択中の表示を解除
 	leafletMap.on('dragstart', () => {
-		onClickBlank();
+		cleanupTooltip();
 	});
 
 	// なにもないところをクリックしたら、選択中の表示を解除
@@ -76,11 +78,11 @@ export const initLeafletMap = async () => {
 			isPolygonClicked = false;
 			return;
 		}
-		onClickBlank();
+		cleanupTooltip();
 	});
 
 	// ズームレベルを削除したら、選択中の表示を解除
-	leafletMap.on('zoomstart', () => onClickBlank());
+	leafletMap.on('zoomstart', () => cleanupTooltip());
 
 	const fillGeoJSON = getFillGeoJSON();
 	const outlineGeoJSON = getOutlineGeoJSON();
@@ -105,12 +107,12 @@ export const initLeafletMap = async () => {
 			});
 			clickedPolygon.addTo(leafletMap);
 			const rect = leafletMapElement.getBoundingClientRect();
-			updateTooltip(
-				onClickBlank,
+			options.tooltipRenderer?.(
 				properties,
 				// changedTouchesを参照するコードを削除。スマホでの動作を要確認
 				e.originalEvent.clientX - rect.left,
 				e.originalEvent.clientY - rect.top,
+				cleanupTooltip,
 			);
 		});
 		polygon.addTo(leafletMap);
