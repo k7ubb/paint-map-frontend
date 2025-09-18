@@ -11,7 +11,6 @@ const buildOptions = {
 	bundle: true,
 	format: 'esm',
 	platform: 'browser',
-	minify: true,
 	define: {
 		'process.env.API_URL': JSON.stringify(process.env.API_URL)
 	}
@@ -54,12 +53,19 @@ const performBuild = async () => {
 			entryPoints: ['src/main.ts'],
 			outfile: (process.env.DEPLOY_PATH ?? 'dist') + '/bundle.js'
 		});
+		await build({
+			...buildOptions,
+			entryPoints: ['src/main-share.ts'],
+			outfile: (process.env.DEPLOY_PATH ?? 'dist') + '/bundle-share.js'
+		});
 		await fs.remove(path.join(distDir, 'bundle.js.map'));
+		await fs.remove(path.join(distDir, 'bundle-share.js.map'));
 		console.log('✅ Build completed successfully');
 	} catch (error) {
 		console.error('❌ Build failed:', error);
 	}
-}
+};
+
 if (isDev) {
 	console.log('🚀 Starting development mode...');
 	await performBuild();

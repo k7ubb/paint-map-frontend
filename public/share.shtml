@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja" prefix="og: http://ogp.me/ns#">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="都道府県・市町村などの地図を色塗りできるWebアプリ">
+<link rel="stylesheet" type="text/css" href="app.css?<!-- BUILD_TIMESTAMP -->">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<meta name="format-detection" content="telephone=no">
+<meta property="og:title" content="ペイントマップ">
+<meta property="og:description" content="都道府県・市町村などの地図を色塗りできるWebアプリ">
+<meta property="og:site_name" content="paint-map.com">
+<!--#exec cgi=".cgi/ogp.cgi"-->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="format-detection" content="telephone=no">
+<title>マップを編集 - ペイントマップ</title>
+</head>
+
+<body class="share">
+<header>
+	<a href="/"></a>
+	<div class="title">
+		<h1 id="map_title"></h1>
+	</div>
+	<a href="" id="iframe_break"></a>
+</header>
+
+<main>
+	<div id="leaflet_map" class="loading"></div>
+	<div id="tooltip">
+		<div id="tooltip_cityname"></div>
+		<div id="tooltip_legend"></div>
+	</div>
+	<details class="floatmenu" open>
+		<summary></summary>
+		<div>
+			<div class="legend" id="legend"></div>
+			<p id="description"></p>
+		</div>
+	</details>
+</main>
+
+<script type="module" src="bundle-share.js?<!-- BUILD_TIMESTAMP -->"></script>
+</body>
+</html>
