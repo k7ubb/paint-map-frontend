@@ -1,6 +1,8 @@
 .DS_Store
-.env.*
+.env
 node_modules
 dist
 public/bundle.js
 public/bundle.js.map
+public/bundle-share.js
+public/bundle-share.js.map

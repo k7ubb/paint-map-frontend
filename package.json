@@ -3,9 +3,7 @@
 	"version": "1.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "npm run watch & npm run serve",
-		"watch": "node build.js --dev",
-		"serve": "http-server public -p 3000 -a localhost --ext shtml",
+		"dev": "node build.js --dev",
 		"build": "node build.js",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix"
@@ -20,7 +18,6 @@
 		"eslint": "^9.35.0",
 		"fs-extra": "^11.3.1",
 		"globals": "^16.4.0",
-		"http-server": "^14.1.1",
 		"replace-in-file": "^8.3.0"
 	}
 }
