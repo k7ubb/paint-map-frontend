@@ -3,10 +3,12 @@
 	"version": "1.0.0",
 	"type": "module",
 	"scripts": {
-    "dev": "npm-run-all --parallel dev:*",
-		"dev:serve": "http-server public"
+		"dev": "npm-run-all --parallel dev:*",
+		"dev:serve": "http-server public",
+		"dev:bundle": "node bundle.js --dev"
 	},
 	"devDependencies": {
+		"fs-extra": "^11.3.2",
 		"http-server": "^14.1.1",
 		"npm-run-all": "^4.1.5"
 	}
