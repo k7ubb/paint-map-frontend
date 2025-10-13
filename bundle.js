@@ -1,5 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
+import { glob } from 'glob';
+import { build } from 'esbuild';
 
 const isDev = process.argv.includes('--dev');
 
@@ -9,6 +11,16 @@ const bundle = async () => {
 	
 	await fs.emptyDir(distDir);
 	await fs.copy(publicDir, distDir);
+
+	const entryPoints = await glob('src/*.{ts,tsx,js,jsx}');
+
+	await build({
+		bundle: true,
+		format: 'esm',
+		platform: 'browser',
+		entryPoints,
+		outdir: path.join(distDir, 'src'),
+	});
 	console.log('Bundle completed');
 };
 
@@ -19,7 +31,7 @@ if (isDev) {
 		console.log('Bundle error:', e);
 	}
 
-	const watchDirs = ['public'];
+	const watchDirs = ['public', 'src'];
 	watchDirs.forEach(dir => {
 		fs.watch(dir, { recursive: true }, async (eventType, filename) => {
 			if (filename) {
