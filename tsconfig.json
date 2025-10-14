@@ -3,6 +3,7 @@
 		"target": "ESNext",
 		"module": "ESNext",
 		"moduleResolution": "bundler",
+		"strict": true,
 		"baseUrl": "./src",
 		"paths": {
 			"*": ["*", "./src/*"]
