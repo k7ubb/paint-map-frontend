@@ -12,6 +12,8 @@
 		"build:bundle": "node bundle.js"
 	},
 	"devDependencies": {
+		"@types/node": "^24.7.2",
+		"dotenv": "^17.2.3",
 		"esbuild": "^0.25.10",
 		"fs-extra": "^11.3.2",
 		"glob": "^11.0.3",

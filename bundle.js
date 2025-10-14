@@ -2,8 +2,10 @@ import path from 'path';
 import fs from 'fs-extra';
 import { glob } from 'glob';
 import { build } from 'esbuild';
+import { config } from 'dotenv';
 
 const isDev = process.argv.includes('--dev');
+config({ path: '.env' });
 
 const bundle = async () => {
 	const distDir = path.resolve('dist');
@@ -13,12 +15,17 @@ const bundle = async () => {
 	await fs.copy(publicDir, distDir);
 
 	const entryPoints = await glob('src/*.{ts,tsx,js,jsx}');
+	const define = Object.keys(process.env).reduce((acc, key) => ({
+		...acc,
+		[`process.env.${key}`]: JSON.stringify(process.env[key])
+	}), {});
 
 	await build({
 		bundle: true,
 		format: 'esm',
 		platform: 'browser',
 		entryPoints,
+		define,
 		outdir: path.join(distDir, 'src'),
 	});
 	console.log('Bundle completed');
