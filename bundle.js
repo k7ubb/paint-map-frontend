@@ -3,6 +3,7 @@ import fs from 'fs-extra';
 import { glob } from 'glob';
 import { build } from 'esbuild';
 import { config } from 'dotenv';
+import { replaceInFile } from 'replace-in-file';
 
 const isDev = process.argv.includes('--dev');
 config({ path: '.env' });
@@ -13,6 +14,12 @@ const bundle = async () => {
 	
 	await fs.emptyDir(distDir);
 	await fs.copy(publicDir, distDir);
+
+	await replaceInFile({
+		files: path.join(distDir, '**/*.html'),
+		from: /<!--BUILD_TIMESTAMP-->/g,
+		to: Date.now().toString(36)
+	});
 
 	const entryPoints = await glob('src/*.{ts,tsx,js,jsx}');
 	const define = Object.keys(process.env).reduce((acc, key) => ({
