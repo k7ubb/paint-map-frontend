@@ -4,7 +4,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "npm-run-all --parallel dev:*",
-		"dev:serve": "http-server public",
+		"dev:serve": "http-server dist -a localhost",
 		"dev:typecheck": "tsc --noEmit --watch",
 		"dev:bundle": "node bundle.js --dev",
 		"build": "npm-run-all build:*",
