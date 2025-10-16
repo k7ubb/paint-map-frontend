@@ -34,6 +34,7 @@ const bundle = async () => {
 		entryPoints,
 		define,
 		outdir: path.join(distDir, 'src'),
+		sourcemap: isDev ? 'inline' : false,
 	});
 	console.log('Bundle completed');
 };
