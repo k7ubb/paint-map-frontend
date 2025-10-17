@@ -4,6 +4,7 @@ import { getURLParam } from 'utils';
 import { getMapData } from 'mapData';
 import { getFillGeoJSON, getOutlineGeoJSON } from 'geoJSONData';
 import { createPolygon } from 'leafletMap/polygon';
+import type { TooltipRenderer } from 'tooltip/TooltipRenderer';
 
 const L = window.L as typeof import('leaflet');
 
@@ -23,8 +24,9 @@ let fillPolygonHash: { [code: string]: L.Polygon } = {};
 
 let baseLayers: { [name: string]: L.TileLayer } = {};
 
-export const initLeafletMap = async (option: {
-	controllerPosition: 'topright' | 'topleft' | 'bottomright' | 'bottomleft';
+export const initLeafletMap = async (options: {
+	controllerPosition: 'topright' | 'topleft' | 'bottomright' | 'bottomleft',
+	tooltipRenderer?: TooltipRenderer
 }) => {
 	const mapData = getMapData();
 	const lat = Number(getURLParam('lat') ?? mapData.position.lat);
@@ -36,7 +38,7 @@ export const initLeafletMap = async (option: {
 		...(mapData.worldCopyJump && { worldCopyJump: true })
 	}).setView([lat, lng], zoom);
 
-	leafletMap.zoomControl.setPosition(option.controllerPosition);
+	leafletMap.zoomControl.setPosition(options.controllerPosition);
 
 	baseLayers = {
 		blank: L.tileLayer('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', {
@@ -50,7 +52,7 @@ export const initLeafletMap = async (option: {
 	L.control.layers(
 		baseLayers,
 		undefined,
-		{ position: option.controllerPosition }
+		{ position: options.controllerPosition }
 	).addTo(leafletMap);
 
 	const cleanupTooltip = () => {
@@ -58,6 +60,7 @@ export const initLeafletMap = async (option: {
 			leafletMap.removeLayer(clickedPolygon);
 			clickedPolygon = null;
 		}
+		options.tooltipRenderer?.();
 	};
 
 	const fillGeoJSON = getFillGeoJSON();
@@ -70,7 +73,7 @@ export const initLeafletMap = async (option: {
 			color: '#999999',
 			weight: 1
 		});
-		polygon.on('click', () => {
+		polygon.on('click', (e) => {
 			isPolygonClicked = true;
 			if (clickedPolygon) {
 				leafletMap.removeLayer(clickedPolygon);
@@ -82,6 +85,13 @@ export const initLeafletMap = async (option: {
 				interactive: false
 			});
 			clickedPolygon.addTo(leafletMap);
+			const rect = leafletMapElement.getBoundingClientRect();
+			options.tooltipRenderer?.(
+				properties,
+				e.originalEvent.clientX - rect.left,
+				e.originalEvent.clientY - rect.top,
+				cleanupTooltip,
+			);
 		});
 		polygon.addTo(leafletMap);
 		fillPolygonHash[properties.code] = polygon;
@@ -120,6 +130,9 @@ export const initLeafletMap = async (option: {
 		cleanupTooltip();
 	});
 
+	// ズームレベルを削除したら、選択中の表示を解除
+	leafletMap.on('zoomstart', () => cleanupTooltip());
+	
 	// 初回は全てのfillPolygonを描画
 	updateMap({
 		...Object.fromEntries(Object.keys(fillPolygonHash).map(key => [key, 0])),

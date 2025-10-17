@@ -4,6 +4,7 @@ import { fetchJSON, getURLParam } from 'utils';
 import { getMapData, setMapData } from 'mapData';
 import { loadGeoJSON } from 'geoJSONData';
 import { leafletMapElement, initLeafletMap } from 'leafletMap';
+import { renderTooltipWithLegend } from 'tooltip/renderTooltipWithLegend';
 
 const main = async () => {
 	try {
@@ -18,7 +19,8 @@ const main = async () => {
 		document.title = mapData.title + ' - ペイントマップ';
 		(document.getElementById('map_title') as HTMLElement).innerText = mapData.title;
 		await initLeafletMap({
-			controllerPosition: 'topleft'
+			controllerPosition: 'topleft',
+			tooltipRenderer: renderTooltipWithLegend
 		});
 	} catch(e) {
 		console.error(e);
