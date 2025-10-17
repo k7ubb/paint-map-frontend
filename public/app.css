@@ -1,0 +1,306 @@
+@import url(https://use.fontawesome.com/releases/v6.4.2/css/all.css);
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+	min-height: 100%;
+	font-family: sans-serif;
+	color: #333;
+	touch-action: manipulation;
+}
+
+header {
+	display: flex;
+	gap: 8px;
+	padding: 8px;
+	background-color: #daf5ff;
+	align-items: center;
+
+	body.share & {
+		background-color: #e1685f;
+		color: #fff;
+	}
+
+	> a[href="/"]::before {
+		content: "";
+		display: block;
+		width: 20px;
+		height: 20px;
+		background: url(icon.png) center / contain;
+	}
+
+	h1 {
+		margin: 0;
+		font-size: 20px;
+		line-height: 1em;
+		font-weight: normal;
+	}
+}
+
+
+
+main {
+	flex: 1;
+	position: relative;
+}
+
+#leaflet {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: #eef9f9;
+	z-index: 0 !important; /* leaflet override */
+
+	&.loading::before {
+		content: "";
+		display: block;
+		position: absolute;
+		top: calc(calc(100% - 20px) / 2);
+		right: calc(calc(100% - 20px) / 2);
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		border-width: 4px;
+		border-style: solid;
+		border-color: #999 transparent transparent transparent;
+		animation: spin 1s infinite linear;
+	}
+}
+
+#tooltip {
+	display: none;
+	position: absolute;
+	padding: 2px;
+	background: #fff;
+	border: 2px solid #779bc8;
+	border-radius: 4px;
+
+	#tooltip_cityname {
+		font-size: 20px;
+		line-height: 1em;
+	}
+
+	#tooltip_buttons {
+		margin: 0 -1px;
+
+		a {
+			display: inline-block;
+			width: 30px;
+			height: 30px;
+			margin: 0 1px -6px;
+			border: 2px solid #000;
+			border-radius: 4px;
+		}
+	}
+}
+
+.sidemenu, .floatmenu {
+	z-index: auto;
+	position: absolute;
+	background-color: #fff;
+
+	&[open] {
+		width: 228px;
+	}
+
+	> summary {
+		display: block;
+		position: absolute;
+		width: 48px;
+		height: 48px;
+		line-height: 48px;
+		text-align: center;
+		box-sizing: content-box;
+		cursor: pointer;
+		background-color: #fff;
+		list-style: none;
+		
+		&::-webkit-details-marker {
+			display: none;
+		}
+
+		&::before {
+			font-family: "Font Awesome 5 Free";
+			font-weight: 900;
+			font-size: 16px;
+			color: #666;
+		}
+
+		&:hover {
+			background: #eee;
+		}
+	}
+
+	> div {
+		padding: 16px;
+		min-width: 160px;
+
+		.legend {
+			font-size: 18px;
+		}		
+	}
+}
+
+.sidemenu {
+	height: 100%;
+
+	> div > .legend {
+		max-height: calc(100vh - 228px);
+		overflow: auto;
+
+		&::before {
+			content: "";
+			display: inline-block;
+			width: 20px;
+			height: 20px;
+			background-color: #fff;
+		}
+
+		hr {
+			margin: 16px 0;
+			border: 1px solid #999;
+		}
+	}
+
+	&:not([open]) {
+		> summary {
+			top: 160px;
+			border-radius: 0 8px 8px 0;
+			box-shadow: 0 1px 4px rgb(0 0 0 / 0.3);
+			
+			&::before {
+				content: "\f101";
+			}
+		}
+	}
+	
+	&[open] {
+		> summary {
+			right: 0;
+			border-radius: 50%;
+			
+			&::before {
+				content: "\f100";
+			}
+		}
+	}
+
+	> div summary, > div .summary_dummy {
+		display: inline-block;
+		padding: 0;
+		margin-left: 8px; /* .button (保存ボタン) と揃える */
+		border-style: none;
+		font-size: 16px;
+		background-color: #fff;
+		color: #6c90c1;
+
+		i {
+			color: #333;
+			width: 20px;
+			text-align: center;
+		}
+	}
+
+	> div summary {
+		cursor: pointer;
+	}
+
+	> div .summary_dummy {
+		color: #999;
+		text-decoration: line-through;
+	
+		i {
+			color: inherit;
+		}
+	}
+
+	#close_dialog {
+		display: none;
+		margin: 4px;
+		color: #f00;
+		font-size: 12px;
+	}
+
+	.links {
+		margin-top: 64px;
+		padding-left: 8px;
+
+		a {
+			text-decoration: none;
+			border-bottom: 1px solid #333;
+			color: #110f0f;
+			
+			i {
+				color: inherit;
+				width: 20px;
+				text-align: center;
+			}
+
+			&:hover {
+				background-color: #daf5ff;
+			}
+		}
+	}
+	:not(details.dialog[open]) > summary:hover {
+		opacity: .5;
+	}
+}
+
+.floatmenu {
+	border-radius: 2px;
+	top: 10px;
+	right: 10px;
+	max-height: calc(100% - 36px);
+	overflow: auto;
+	box-shadow: 0 1px 4px rgb(0 0 0 / 0.3);
+	
+	#description {
+		display: none; /* descriptionが空の場合は表示しない */
+		font-size: 80%;
+		border-top: 1px solid #999;
+		padding-top: 16px;
+		margin-bottom: 0;
+
+		a {
+			color: #110f0f;
+			
+			&:hover {
+				background-color: #daf5ff;
+			}
+		}
+	}
+
+	&:not([open]) {
+		width: 48px;
+		height: 48px;
+
+		> summary::before {
+			content: "\f0c9";
+		}
+	}
+	
+	&[open] {
+		> summary {
+			right: 0;
+			border-radius: 50%;
+			
+			&::before {
+				content: "\f00d";
+			}
+		}
+	}
+}

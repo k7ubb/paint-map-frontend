@@ -3,11 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>title</title>
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" type="text/css" href="app.css?<!--BUILD_TIMESTAMP-->">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<title>マップを編集 - ペイントマップ</title>
 </head>
 
 <body>
-Hello, world!!
-<script type="module" src="src/main.js?v=<!--BUILD_TIMESTAMP-->"></script>
+	<header>
+		<a href="/"></a>
+		<h1 id="map_title"></h1>
+	</header>
+
+	<main>
+		<div id="leaflet" class="loading"></div>
+		<div id="tooltip">
+			<div id="tooltip_cityname"></div>
+			<div id="tooltip_buttons"></div>
+		</div>
+		<details class="sidemenu" open>
+			<summary></summary>
+			<div>
+				<div class="legend" id="legend"></div>
+				<hr>
+				<!-- <p id="close_dialog"><i class="fa-solid fa-circle-exclamation"></i> 未保存の変更があります</p> -->
+				<p class="links">
+					<a href="/" target="_blank"><i class="fa-solid fa-house"></i> このサイトについて</a><br>
+					<a href="/manual/" target="_blank"><i class="fa-regular fa-circle-question"></i> マニュアル</a>
+				</p>
+			</div>
+		</details>
+	</main>
+
+	<script type="module" src="src/index.js?<!--BUILD_TIMESTAMP-->"></script>
 </body>
 </html>
