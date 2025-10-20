@@ -1,13 +1,10 @@
 'use strict';
 
+import { getElementById } from 'utils';
 import { getMapData } from 'mapData';
 import { getFillGeoJSON } from 'geoJSONData';
 
-const legendElementNullable = document.getElementById('legend');
-if (!(legendElementNullable instanceof HTMLElement)) {
-	throw new Error('Element \'error_dialog\' does not exist');
-}
-const legendElement: HTMLElement = legendElementNullable;
+const legendElement = getElementById('legend');
 
 export const updateLegend = () => {
 	const mapData = getMapData();

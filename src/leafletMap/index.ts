@@ -1,6 +1,6 @@
 'use strict';
 
-import { getURLParam } from 'utils';
+import { getURLParam, getElementById } from 'utils';
 import { getMapData } from 'mapData';
 import { getFillGeoJSON, getOutlineGeoJSON } from 'geoJSONData';
 import { createPolygon } from 'leafletMap/polygon';
@@ -8,11 +8,7 @@ import type { TooltipRenderer } from 'tooltip/TooltipRenderer';
 
 const L = window.L as typeof import('leaflet');
 
-const leafletMapElementNullable = document.getElementById('leaflet');
-if (!(leafletMapElementNullable instanceof HTMLElement)) {
-	throw new Error('Element \'leaflet_map\' does not exist');
-}
-export const leafletMapElement: HTMLElement = leafletMapElementNullable;
+export const leafletMapElement = getElementById('leaflet');
 
 let leafletMap: L.Map;
 

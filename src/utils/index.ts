@@ -24,3 +24,12 @@ export const getCookie = (name: string): string | null => {
 	const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
 	return match ? decodeURIComponent(match[2]) : null;
 };
+
+
+export const getElementById = (id: string): HTMLElement => {
+	const elementNullable = document.getElementById(id);
+	if (!(elementNullable instanceof HTMLElement)) {
+		throw new Error(`Element '${id}' does not exist`);
+	}
+	return elementNullable;
+};
