@@ -18,3 +18,9 @@ export const getURLParam = (name: string): string | null => {
 	const params = new URLSearchParams(window.location.search);
 	return params.get(name);
 };
+
+
+export const getCookie = (name: string): string | null => {
+	const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+	return match ? decodeURIComponent(match[2]) : null;
+};

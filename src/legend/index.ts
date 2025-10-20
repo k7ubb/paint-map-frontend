@@ -3,6 +3,12 @@
 import { getMapData } from 'mapData';
 import { getFillGeoJSON } from 'geoJSONData';
 
+const legendElementNullable = document.getElementById('legend');
+if (!(legendElementNullable instanceof HTMLElement)) {
+	throw new Error('Element \'error_dialog\' does not exist');
+}
+const legendElement: HTMLElement = legendElementNullable;
+
 export const updateLegend = () => {
 	const mapData = getMapData();
 	const fillGeoJSON = getFillGeoJSON();
@@ -26,5 +32,5 @@ export const updateLegend = () => {
 		result += `<span class="color"></span> ${(total - count[0])} / ${total} ${mapData.non_zero_legend}`;
 	}
 
-	(document.getElementById('legend') as HTMLElement).innerHTML = result;
+	legendElement.innerHTML = result;
 };

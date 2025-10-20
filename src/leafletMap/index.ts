@@ -9,7 +9,7 @@ import type { TooltipRenderer } from 'tooltip/TooltipRenderer';
 const L = window.L as typeof import('leaflet');
 
 const leafletMapElementNullable = document.getElementById('leaflet');
-if (!leafletMapElementNullable) {
+if (!(leafletMapElementNullable instanceof HTMLElement)) {
 	throw new Error('Element \'leaflet_map\' does not exist');
 }
 export const leafletMapElement: HTMLElement = leafletMapElementNullable;
