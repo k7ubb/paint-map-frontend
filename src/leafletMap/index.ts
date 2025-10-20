@@ -25,7 +25,6 @@ let fillPolygonHash: { [code: string]: L.Polygon } = {};
 let baseLayers: { [name: string]: L.TileLayer } = {};
 
 export const initLeafletMap = async (options: {
-	controllerPosition: 'topright' | 'topleft' | 'bottomright' | 'bottomleft',
 	tooltipRenderer?: TooltipRenderer
 }) => {
 	const mapData = getMapData();
@@ -38,7 +37,7 @@ export const initLeafletMap = async (options: {
 		...(mapData.worldCopyJump && { worldCopyJump: true })
 	}).setView([lat, lng], zoom);
 
-	leafletMap.zoomControl.setPosition(options.controllerPosition);
+	leafletMap.zoomControl.setPosition('topright');
 
 	baseLayers = {
 		blank: L.tileLayer('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', {
@@ -52,7 +51,7 @@ export const initLeafletMap = async (options: {
 	L.control.layers(
 		baseLayers,
 		undefined,
-		{ position: options.controllerPosition }
+		{ position: 'topright' }
 	).addTo(leafletMap);
 
 	const cleanupTooltip = () => {
@@ -132,7 +131,7 @@ export const initLeafletMap = async (options: {
 
 	// ズームレベルを削除したら、選択中の表示を解除
 	leafletMap.on('zoomstart', () => cleanupTooltip());
-	
+
 	// 初回は全てのfillPolygonを描画
 	updateMap({
 		...Object.fromEntries(Object.keys(fillPolygonHash).map(key => [key, 0])),

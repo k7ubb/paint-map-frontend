@@ -1,5 +1,7 @@
 'use strict';
 
+import { updateLegend } from 'legend';
+
 type MapData = {
 	type: string,
 	title: string,
@@ -51,4 +53,5 @@ export const updateMapData = (data: { [code: string]: number }) => {
 	for (const [ code, value ] of Object.entries(data)) {
 		mapData.data[code] = value;
 	}
+	updateLegend();
 };

@@ -1,6 +1,6 @@
 'use strict';
 
-export const fetchJSON = async (url: string, options?: RequestInit) =>{
+export const fetchJSON = async (url: string, options?: RequestInit) => {
 	const response = await fetch(url, options);
 	if (!response.ok) {
 		throw new Error(`Failed to fetch JSON from ${url}: ${response.statusText}`);

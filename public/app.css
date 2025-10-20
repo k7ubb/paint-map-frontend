@@ -9,6 +9,21 @@
 	}
 }
 
+.loading::before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: calc(calc(100% - 20px) / 2);
+	right: calc(calc(100% - 20px) / 2);
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	border-width: 4px;
+	border-style: solid;
+	border-color: #999 transparent transparent transparent;
+	animation: spin 1s infinite linear;
+}
+
 html {
 	height: 100%;
 }
@@ -17,16 +32,19 @@ body {
 	display: flex;
 	flex-direction: column;
 	margin: 0;
-	min-height: 100%;
+	height: 100%;
 	font-family: sans-serif;
 	color: #333;
 	touch-action: manipulation;
 }
 
 header {
+	--header-height: 20px;
+
 	display: flex;
 	gap: 8px;
 	padding: 8px;
+	height: var(--header-height);
 	background-color: #daf5ff;
 	align-items: center;
 
@@ -38,20 +56,18 @@ header {
 	> a[href="/"]::before {
 		content: "";
 		display: block;
-		width: 20px;
-		height: 20px;
+		width: var(--header-height);
+		height: var(--header-height);
 		background: url(icon.png) center / contain;
 	}
 
 	h1 {
 		margin: 0;
-		font-size: 20px;
+		font-size: var(--header-height);
 		line-height: 1em;
 		font-weight: normal;
 	}
 }
-
-
 
 main {
 	flex: 1;
@@ -64,21 +80,6 @@ main {
 	height: 100%;
 	background-color: #eef9f9;
 	z-index: 0 !important; /* leaflet override */
-
-	&.loading::before {
-		content: "";
-		display: block;
-		position: absolute;
-		top: calc(calc(100% - 20px) / 2);
-		right: calc(calc(100% - 20px) / 2);
-		width: 12px;
-		height: 12px;
-		border-radius: 50%;
-		border-width: 4px;
-		border-style: solid;
-		border-color: #999 transparent transparent transparent;
-		animation: spin 1s infinite linear;
-	}
 }
 
 #tooltip {
@@ -98,7 +99,7 @@ main {
 		display: flex;
 		gap: 2px;
 		margin-top: 4px;
-		
+
 		a {
 			display: block;
 			width: 30px;
@@ -110,12 +111,13 @@ main {
 }
 
 .sidemenu, .floatmenu {
-	z-index: auto;
+	--menu-width: 228px;
+
 	position: absolute;
 	background-color: #fff;
 
 	&[open] {
-		width: 228px;
+		width: var(--menu-width);
 	}
 
 	> summary {
@@ -148,34 +150,25 @@ main {
 
 	> div {
 		padding: 16px;
-		min-width: 160px;
 
 		.legend {
 			font-size: 18px;
-		}		
+		}
+
+		hr {
+			border-style: solid;
+			border-color: #ccc;
+			border-width: 1px 0 0 0;
+
+			&:has(+ :empty) {
+				display: none;
+			}
+		}
 	}
 }
 
 .sidemenu {
 	height: 100%;
-
-	> div > .legend {
-		max-height: calc(100vh - 228px);
-		overflow: auto;
-
-		&::before {
-			content: "";
-			display: inline-block;
-			width: 20px;
-			height: 20px;
-			background-color: #fff;
-		}
-
-		hr {
-			margin: 16px 0;
-			border: 1px solid #999;
-		}
-	}
 
 	&:not([open]) {
 		> summary {
@@ -190,6 +183,9 @@ main {
 	}
 	
 	&[open] {
+		/* close状態で指定すると開ボタンが消える */
+		overflow-y: auto;
+		
 		> summary {
 			right: 0;
 			border-radius: 50%;
@@ -200,81 +196,45 @@ main {
 		}
 	}
 
-	> div summary, > div .summary_dummy {
-		display: inline-block;
-		padding: 0;
-		margin-left: 8px; /* .button (保存ボタン) と揃える */
-		border-style: none;
-		font-size: 16px;
-		background-color: #fff;
-		color: #6c90c1;
+	> div {
+		.links {
+			margin-top: 64px;
+			padding-left: 8px;
 
-		i {
-			color: #333;
-			width: 20px;
-			text-align: center;
-		}
-	}
+			a {
+				text-decoration: none;
+				border-bottom: 1px solid #333;
+				color: #110f0f;
+				
+				i {
+					color: inherit;
+					width: 20px;
+					text-align: center;
+				}
 
-	> div summary {
-		cursor: pointer;
-	}
-
-	> div .summary_dummy {
-		color: #999;
-		text-decoration: line-through;
-	
-		i {
-			color: inherit;
-		}
-	}
-
-	#close_dialog {
-		display: none;
-		margin: 4px;
-		color: #f00;
-		font-size: 12px;
-	}
-
-	.links {
-		margin-top: 64px;
-		padding-left: 8px;
-
-		a {
-			text-decoration: none;
-			border-bottom: 1px solid #333;
-			color: #110f0f;
-			
-			i {
-				color: inherit;
-				width: 20px;
-				text-align: center;
-			}
-
-			&:hover {
-				background-color: #daf5ff;
+				&:hover {
+					background-color: #daf5ff;
+				}
 			}
 		}
-	}
-	:not(details.dialog[open]) > summary:hover {
-		opacity: .5;
 	}
 }
 
 .floatmenu {
 	border-radius: 2px;
 	top: 10px;
-	right: 10px;
+	left: 10px;
 	max-height: calc(100% - 36px);
 	overflow: auto;
 	box-shadow: 0 1px 4px rgb(0 0 0 / 0.3);
 	
 	#description {
-		display: none; /* descriptionが空の場合は表示しない */
+		margin: 0;
 		font-size: 80%;
-		border-top: 1px solid #999;
-		padding-top: 16px;
-		margin-bottom: 0;
+
+		&:not(:empty) {
+			margin: 1em 0 0;
+		}
 
 		a {
 			color: #110f0f;
@@ -304,4 +264,11 @@ main {
 			}
 		}
 	}
+}
+
+.legend .color {
+	display: inline-block;
+	width: .6em;
+	height: .6em;
+	margin-right: 4px;
 }
