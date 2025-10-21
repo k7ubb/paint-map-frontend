@@ -33,3 +33,8 @@ export const getElementById = (id: string): HTMLElement => {
 	}
 	return elementNullable;
 };
+
+
+export const clearCookie = (name: string) => {
+	document.cookie = `${name}=; Max-Age=0; path=/;`;
+};

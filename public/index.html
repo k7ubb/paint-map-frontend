@@ -27,7 +27,7 @@
 			<div>
 				<div class="legend" id="legend"></div>
 				<hr>
-				<!-- <p id="close_dialog"><i class="fa-solid fa-circle-exclamation"></i> 未保存の変更があります</p> -->
+				
 				<p class="links">
 					<a href="/" target="_blank"><i class="fa-solid fa-house"></i> このサイトについて</a><br>
 					<a href="/manual/" target="_blank"><i class="fa-regular fa-circle-question"></i> マニュアル</a>
@@ -35,6 +35,20 @@
 			</div>
 		</details>
 	</main>
+
+	<dialog id="error_dialog">
+		<div>
+			<div class="flex">
+				<i class="fa-solid fa-triangle-exclamation"></i>
+				<div>
+					<h2 id="error_dialog_message"></h2>
+					<p id="error_dialog_description"></p>
+				</div>
+			</div>
+			<button class="common_button dialog_close_button" id="error_dialog_close_button">OK</button>
+			</div>
+		</div>
+	</dialog>
 
 	<script type="module" src="src/index.js?<!--BUILD_TIMESTAMP-->"></script>
 </body>
