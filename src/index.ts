@@ -7,6 +7,7 @@ import { leafletMapElement, initLeafletMap } from 'leafletMap';
 import { renderTooltipWithButton } from 'tooltip/renderTooltipWithButton';
 import { updateLegend } from 'legend';
 import { showErrorDialog } from 'dialog/errorDialog';
+import { initSaveButton } from 'saveButton';
 
 const main = async () => {
 	const userName = getCookie('user_name');
@@ -41,13 +42,18 @@ const main = async () => {
 
 	try {
 		await loadGeoJSON();
-		leafletMapElement.classList.remove('loading');
-		const mapData = getMapData();
-		getElementById('map_title').innerText = mapData.title;
 		await initLeafletMap({
 			tooltipRenderer: renderTooltipWithButton
 		});
+		leafletMapElement.classList.remove('loading');
+
+		const mapData = getMapData();
+		getElementById('map_title').innerText = mapData.title;
 		updateLegend();
+
+		if (mapData.id) {
+			initSaveButton();
+		}
 	} catch(e) {
 		showErrorDialog({
 			message: 'エラーが発生しました。トップページに戻ります。',

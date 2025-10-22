@@ -26,8 +26,28 @@
 			<summary></summary>
 			<div>
 				<div class="legend" id="legend"></div>
+				<button id="legend_edit_dialog_button">
+					<i class="fa-solid fa-pen-to-square"></i> 凡例項目を編集
+				</button>
 				<hr>
-				
+				<button>
+					<i class="fa-solid fa-route"></i> ルート読み込み
+				</button>
+				<button>
+					<i class="fa-solid fa-database"></i> CSVを管理
+				</button>
+				<button>
+					<i class="fa-solid fa-map"></i> 地図の種類を変更
+				</button>
+				<button>
+					<i class="fa-solid fa-images"></i> 地図画像を保存
+				</button>
+				<button>
+					<i class="fa-solid fa-share"></i> 地図を共有
+				</button>
+				<button id="map_save_button" disabled>
+					<i class="fa-solid fa-floppy-disk"></i> 編集内容を保存
+				</button>
 				<p class="links">
 					<a href="/" target="_blank"><i class="fa-solid fa-house"></i> このサイトについて</a><br>
 					<a href="/manual/" target="_blank"><i class="fa-regular fa-circle-question"></i> マニュアル</a>
@@ -46,7 +66,19 @@
 				</div>
 			</div>
 			<button class="common_button dialog_close_button" id="error_dialog_close_button">OK</button>
+		</div>
+	</dialog>
+
+	<dialog id="info_dialog">
+		<div>
+			<div class="flex">
+				<i class="fa-solid fa-check"></i>
+				<div>
+					<h2 id="info_dialog_message"></h2>
+					<p id="info_dialog_description"></p>
+				</div>
 			</div>
+			<button class="common_button dialog_close_button" id="info_dialog_close_button">OK</button>
 		</div>
 	</dialog>
 

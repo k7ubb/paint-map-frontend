@@ -2,7 +2,7 @@
 
 import { updateLegend } from 'legend';
 
-type MapData = {
+export type MapData = {
 	type: string,
 	title: string,
 	description: string,
@@ -28,6 +28,7 @@ type MapData = {
 	maxZoom?: number,
 	minZoom?: number,
 	worldCopyJump?: boolean,
+	id?: string
 };
 
 let mapData: MapData | undefined;

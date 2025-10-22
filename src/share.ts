@@ -26,14 +26,15 @@ const main = async () => {
 
 	try {
 		await loadGeoJSON();
+		await initLeafletMap({
+			tooltipRenderer: renderTooltipWithLegend
+		});
 		leafletMapElement.classList.remove('loading');
+		
 		const mapData = getMapData();
 		document.title = mapData.title + ' - ペイントマップ';
 		getElementById('map_title').innerText = mapData.title;
 		getElementById('description').innerText = mapData.description;
-		await initLeafletMap({
-			tooltipRenderer: renderTooltipWithLegend
-		});
 		updateLegend();
 	} catch(e) {
 		showErrorDialog({
