@@ -17,8 +17,8 @@ const bundle = async () => {
 
 	await replaceInFile({
 		files: path.join(distDir, '**/*.html'),
-		from: /<!--BUILD_TIMESTAMP-->/g,
-		to: Date.now().toString(36)
+		from: /(src|href)="(?!https?:\/\/)(.+?\.(js|css))"/g,
+		to: `$1="$2?ver=${Date.now().toString(36)}"`
 	});
 
 	const entryPoints = await glob('src/*.{ts,tsx,js,jsx}');
