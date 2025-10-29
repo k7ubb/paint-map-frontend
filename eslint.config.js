@@ -26,7 +26,6 @@ export default defineConfig({
 		'indent': ['error', 'tab'],
 		'no-undef': 'off',
 		'no-unused-vars': 'off',
-		'@typescript-eslint/no-unused-vars': ['error'],
 		'@typescript-eslint/no-unused-vars': ['error', {
 			argsIgnorePattern: '^_',
 			varsIgnorePattern: '^_',
