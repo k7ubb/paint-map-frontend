@@ -7,14 +7,17 @@
 		"dev:serve": "http-server dist -a localhost",
 		"dev:typecheck": "tsc --noEmit --watch",
 		"dev:bundle": "node bundle.js --dev",
+		"dev:css": "npx @tailwindcss/cli -i public/tailwind.css -o dist/tailwind.css --watch",
 		"build": "npm-run-all build:*",
 		"build:typecheck": "tsc --noEmit",
 		"build:bundle": "node bundle.js",
+		"build:css": "npx @tailwindcss/cli -i public/tailwind.css -o dist/tailwind.css",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.37.0",
+		"@tailwindcss/cli": "^4.1.16",
 		"@types/node": "^24.7.2",
 		"@types/react": "^19.2.2",
 		"@types/react-dom": "^19.2.2",

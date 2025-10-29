@@ -8,12 +8,22 @@ import { replaceInFile } from 'replace-in-file';
 const isDev = process.argv.includes('--dev');
 config({ path: '.env' });
 
-const bundle = async () => {
+const bundle = async (isWatching) => {
 	const distDir = path.resolve('dist');
 	const publicDir = path.resolve('public');
 	
-	await fs.emptyDir(distDir);
-	await fs.copy(publicDir, distDir);
+	if (isWatching) {
+		const entries = await fs.readdir(distDir);
+		await Promise.all(entries.filter(name => name !== 'tailwind.css').map(async (name) => {
+			await fs.remove(path.join(distDir, name));
+		}));
+	} else {
+		await fs.emptyDir(distDir);
+	}
+
+	await fs.copy(publicDir, distDir, {
+		filter: (src) => path.relative(publicDir, src) !== 'tailwind.css'
+	});
 
 	await replaceInFile({
 		files: path.join(distDir, '**/*.html'),
@@ -52,7 +62,7 @@ if (isDev) {
 			if (filename) {
 				console.log(`File ${eventType}: ${filename}`);
 				try {
-					await bundle();
+					await bundle(true);
 				} catch (error) {
 					console.log('Bundle error:', error);
 				}
