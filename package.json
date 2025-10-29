@@ -16,6 +16,8 @@
 	"devDependencies": {
 		"@eslint/js": "^9.37.0",
 		"@types/node": "^24.7.2",
+		"@types/react": "^19.2.2",
+		"@types/react-dom": "^19.2.2",
 		"dotenv": "^17.2.3",
 		"esbuild": "^0.25.10",
 		"eslint": "^9.37.0",
@@ -27,5 +29,9 @@
 		"replace-in-file": "^8.3.0",
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.46.1"
+	},
+	"dependencies": {
+		"react": "^19.2.0",
+		"react-dom": "^19.2.0"
 	}
 }

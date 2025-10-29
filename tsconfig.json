@@ -4,13 +4,15 @@
 		"module": "ESNext",
 		"moduleResolution": "bundler",
 		"strict": true,
+		"jsx": "react-jsx",
 		"baseUrl": "./src",
 		"paths": {
 			"*": ["*", "./src/*"]
 		}
 	},
 	"include": [
-		"src/**/*.ts"
+		"src/**/*.ts",
+		"src/**/*.tsx"
 	],
 	"exclude": [
 		"dist",
